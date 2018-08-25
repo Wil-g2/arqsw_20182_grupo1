@@ -94,19 +94,22 @@ public class SimpleASTVisitor extends ASTVisitor {
 	}
 	
 	public void gerarArq() {			
-		//Gerar arquivo DOT (graph description language)
-		String path="C:\\Users\\Willian\\Desktop\\Arquivo.txt";
-		String textoQueSeraEscrito = "graph graphname {";
+		//Gerar arquivo DOT (graph description language)		
+		String path="C:\\temp.";
 		FileWriter arquivo;
 		try {
-			arquivo = new FileWriter(new File(path));
-			arquivo.write(textoQueSeraEscrito);
-			arquivo.write(" \" " +this.className+" \" " +" [shape=box]; }");
 			
-			System.out.println();
-			arquivo.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			GraphViz gv = new GraphViz();
+			gv.addln(gv.start_graph());			
+			gv.addln(" \" " +this.className+" \" " +" [shape=box]; ");
+			gv.add(gv.end_graph());			
+			System.out.println(gv.getDotSource());
+			gv.increaseDpi();
+			String type = "png";
+			//File out = new File("/tmp/out"+gv.getImageDpi()+"."+ type);   // Linux
+			File out = new File(path+"."+ type);    // Windows
+			gv.writeGraphToFile( gv.getGraph(gv.getDotSource(),type,"dot"), out );
+							
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
