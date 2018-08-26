@@ -2,8 +2,6 @@ package exemploeclipsejdt.ast;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +9,8 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.search.TypeDeclarationMatch;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class SimpleASTVisitor extends ASTVisitor {
 	private List<String> dependencies;	
@@ -26,12 +18,12 @@ public class SimpleASTVisitor extends ASTVisitor {
 
 	private CompilationUnit fullClass;
 	private String className;
-	private Double numberOfLinesOfCode;
 	
 	public SimpleASTVisitor(ICompilationUnit unit) throws Exception {
 		this.dependencies = new ArrayList<>();		
 		this.attributes = new ArrayList<>();
-
+		
+								
 		this.className = unit.getParent().getElementName() + "."
 				+ unit.getElementName().substring(0, unit.getElementName().length() - 5);
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -40,25 +32,7 @@ public class SimpleASTVisitor extends ASTVisitor {
 		parser.setResolveBindings(true);
 						
 		this.fullClass = (CompilationUnit) parser.createAST(null); // parse
-		this.fullClass.accept(this);		
-		
-		this.numberOfLinesOfCode = (double) unit.toString().split("\n").length;
-		
-		for (Object type : unit.getTypes()){			
-			if (type instanceof TypeDeclaration) {
-				FieldDeclaration [] attributes = ((TypeDeclaration) type).getFields();
-				for (FieldDeclaration attribute: attributes){
-					List<FieldDeclaration> fragments = attribute.fragments();
-					Object obj = fragments.get(0);
-					if (obj instanceof VariableDeclarationFragment){
-						String str = ((VariableDeclarationFragment) obj).getName().toString();
-						this.attributes.add(str);
-					}
-				}
-			}
-			
-		}
-				
+		this.fullClass.accept(this);															
 		
 	}
 
@@ -74,12 +48,6 @@ public class SimpleASTVisitor extends ASTVisitor {
 		return this.attributes.toString();		
 	}
 	
-	//retorna quantide de linhas de uma clase
-	public final String getLOC(){
-		return this.numberOfLinesOfCode.toString();
-		
-	}
-	
 	public final Integer getNMC() {
 		return this.dependencies.size();
 		
@@ -91,20 +59,39 @@ public class SimpleASTVisitor extends ASTVisitor {
 			dependencies.add(node.getName().toString());
 		}
 		return true;
-	}
+	}		
 	
-	public void gerarArq() {			
-		//Gerar arquivo DOT (graph description language)		
+	public void gerarArq(String classe, String line, String qtdatributos, List<String>metodos, List<String>attributes) {			
+		//generate file DOT (graph description language)		
+		
+		//path of file 
 		String path="C:\\temp.";
-		FileWriter arquivo;
+		
+		//FileWriter file;
 		try {
 			
 			GraphViz gv = new GraphViz();
 			gv.addln(gv.start_graph());			
-			gv.addln(" \" " +this.className+" \" " +" [shape=box]; ");
+			gv.addln(" \" " +this.className+" \" " +" [shape=box]; ");			
+			gv.addln("label=\"{{Line of Code|"+ line +"}|");
+			gv.addln("label=\"{Qtd Attributes|"+ qtdatributos +"}|");
+			gv.addln("label=\"{Methods|");
+			for (String m : metodos) { 
+				gv.add (m+","); 
+			} 			
+			gv.add("}|");
+			gv.addln("label=\"{Attributes|");
+			for (String a : attributes) { 
+				gv.add (a+","); 
+			} 			
+			gv.add("}|}");
 			gv.add(gv.end_graph());			
+			
+			//out of file .dot 
 			System.out.println(gv.getDotSource());
 			gv.increaseDpi();
+			
+			//Type file
 			String type = "png";
 			//File out = new File("/tmp/out"+gv.getImageDpi()+"."+ type);   // Linux
 			File out = new File(path+"."+ type);    // Windows

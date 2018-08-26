@@ -15,6 +15,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import exemploeclipsejdt.ast.NumberOfAttributes;
+import exemploeclipsejdt.ast.NumberofLine;
 import exemploeclipsejdt.ast.SimpleASTVisitor;
 
 /**
@@ -53,24 +55,31 @@ public class SampleHandler extends AbstractHandler {
 		final Collection<String> dependencies = new LinkedList<String>();
 
 		SimpleASTVisitor cv;
-					
+		NumberofLine nl;
+		NumberOfAttributes na; 			
 		try {
-			cv = new SimpleASTVisitor(unit);			
+			cv = new SimpleASTVisitor(unit);	
+			nl = new NumberofLine(unit);
+			na = new NumberOfAttributes(unit);
+			
 			dependencies.addAll(cv.getDependencies());
 			//pega o nome da classe
 			MessageDialog.openInformation(window.getShell(),
 					"ExemploEclipseJDT", cv.getClassName());
 			
 			MessageDialog.openInformation(window.getShell(),
-					"ExemploEclipseJDT", cv.getAtributos());
+					"Atributos ", "Attributes Class:"+na.getNumberOfAttributes());
+			
+			MessageDialog.openInformation(window.getShell(),
+					"Atributos ", "Attributes Class:"+na.attributes());
 			
 			MessageDialog.openInformation(window.getShell(),"LOC", 
-					cv.getLOC());
+					"Line of Code Class:"+nl.getLOC());
 			
 			MessageDialog.openInformation(window.getShell(),"NOM", 
-					cv.getNMC().toString());
+					"Number of Method Class:"+ cv.getNMC().toString());
 			
-			cv.gerarArq();
+			cv.gerarArq(cv.getClassName(),nl.getLOC(),na.getNumberOfAttributes().toString(),cv.getDependencies(),na.attributes());
 			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -78,7 +87,7 @@ public class SampleHandler extends AbstractHandler {
 		}
 
 		MessageDialog.openInformation(window.getShell(),
-				"ExemploEclipseJDT", dependencies.toString());
+				"ExemploEclipseJDT", "Dependencies of Class:"+ dependencies.toString());
 		
 	   
 		
