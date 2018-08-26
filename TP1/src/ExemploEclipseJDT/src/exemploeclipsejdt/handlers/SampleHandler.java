@@ -61,14 +61,16 @@ public class SampleHandler extends AbstractHandler {
 			MessageDialog.openInformation(window.getShell(),
 					"ExemploEclipseJDT", cv.getClassName());
 			
-			//MessageDialog.openInformation(window.getShell(),
-			//		"ExemploEclipseJDT", cv.getAtributos());
+			MessageDialog.openInformation(window.getShell(),
+					"ExemploEclipseJDT", cv.getAtributos());
 			
 			MessageDialog.openInformation(window.getShell(),"LOC", 
 					cv.getLOC());
 			
 			MessageDialog.openInformation(window.getShell(),"NOM", 
 					cv.getNMC().toString());
+			
+			cv.gerarArq();
 			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -78,6 +80,7 @@ public class SampleHandler extends AbstractHandler {
 		MessageDialog.openInformation(window.getShell(),
 				"ExemploEclipseJDT", dependencies.toString());
 		
+	   
 		
 		return null;
 
