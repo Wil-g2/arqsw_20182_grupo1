@@ -1,0 +1,13 @@
+// Arquivo de analise gerado no formato DOT Graphitz
+digraph AnaliseEstatica {
+Baz;
+Bar;
+Foo;
+Foo2;
+
+
+Bar -> OTalmetodoBBar;
+OTalmetodoBBar -> a, b, c, destaVez;
+Foo [shape=box,style=filled,color="red"];
+Foo2 [shape=box,style=filled,color="red"];
+}
