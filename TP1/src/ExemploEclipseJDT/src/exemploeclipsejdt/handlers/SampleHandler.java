@@ -79,7 +79,7 @@ public class SampleHandler extends AbstractHandler {
 			MessageDialog.openInformation(window.getShell(),"NOM", 
 					"Number of Method Class:"+ cv.getNMC().toString());
 			
-			cv.gerarArq(cv.getClassName(),nl.getLOC(),na.getNumberOfAttributes().toString(),cv.getDependencies(),na.attributes());
+			cv.gerarArq(cv.getClassName(),nl.getLOC(),na.getNumberOfAttributes().toString(),cv.getDependencies(),na.attributes(), cv.getNMC().toString());
 			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

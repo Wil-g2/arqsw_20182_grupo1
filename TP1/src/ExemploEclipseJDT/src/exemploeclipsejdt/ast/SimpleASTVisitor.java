@@ -61,32 +61,32 @@ public class SimpleASTVisitor extends ASTVisitor {
 		return true;
 	}		
 	
-	public void gerarArq(String classe, String line, String qtdatributos, List<String>metodos, List<String>attributes) {			
+	public void gerarArq(String classe, String line, String qtdatributos, List<String>metodos, List<String>attributes, String getCountMet) {			
 		//generate file DOT (graph description language)		
 		
 		//path of file 
 		String path="C:\\temp.";
 		
 		//FileWriter file;
-		try {
+		try {			
 			
 			GraphViz gv = new GraphViz();
-			gv.addln(gv.start_graph());			
-			gv.addln(" \" " +this.className+" \" " +" [shape=box]; ");			
-			gv.addln("label=\"{{Line of Code|"+ line +"}|");
-			gv.addln("label=\"{Qtd Attributes|"+ qtdatributos +"}|");
-			gv.addln("label=\"{Methods|");
-			for (String m : metodos) { 
-				gv.add (m+","); 
+			gv.addln(gv.start_graph());		
+			gv.addln("node [shape=\"box\"];");
+			gv.addln(" \""+this.className+"\" [style=filled color=red];");			
+			gv.addln("LineofCode [label= \"Line of Code \\n"+ line +" \" style=\"dotted\" shape=\"box\"];");
+			gv.addln("QtdAttributes [label = \"Qtd. Attributes \\n "+ qtdatributos +" \" style=\"dotted\" shape=\"box\"]; ");
+			gv.addln("QtdMethods [label = \"Qtd. Methods \\n "+ getCountMet +"\" style=\"dotted\" shape=\"box\"];");
+			for (String m : metodos) { 				
+				gv.add (" \""+this.className+"\" -> "+m+";"); 
 			} 			
-			gv.add("}|");
-			gv.addln("label=\"{Attributes|");
+			gv.addln("Attributes [label= \"Attributes\\n ");
 			for (String a : attributes) { 
-				gv.add (a+","); 
+				gv.add ("*"+a+";"); 
 			} 			
-			gv.add("}|}");
-			gv.add(gv.end_graph());			
-			
+			gv.add(" \"style=\"dotted\" shape=\"box\"];");
+			gv.addln(" \""+this.className+"\" -> Attributes");
+			gv.add(gv.end_graph());						
 			//out of file .dot 
 			System.out.println(gv.getDotSource());
 			gv.increaseDpi();
