@@ -72,29 +72,31 @@ public class SimpleASTVisitor extends ASTVisitor {
 			
 			GraphViz gv = new GraphViz();
 			gv.addln(gv.start_graph());		
-			gv.addln("node [shape=\"box\"];");
-			gv.addln(" \""+this.className+"\" [style=filled color=red];");			
-			gv.addln("LineofCode [label= \"Line of Code \\n"+ line +" \" style=\"dotted\" shape=\"box\"];");
-			gv.addln("QtdAttributes [label = \"Qtd. Attributes \\n "+ qtdatributos +" \" style=\"dotted\" shape=\"box\"]; ");
-			gv.addln("QtdMethods [label = \"Qtd. Methods \\n "+ getCountMet +"\" style=\"dotted\" shape=\"box\"];");
+			gv.addln("node [shape=box];");
+			gv.addln("\""+this.className+"\" [style=filled color=red];");			
+			gv.addln("LineofCode [label=\"Line of Code\\n"+ line +" \"] style=dotted;");
+			gv.addln("QtdAttributes [label=\"Qtd. Attributes\\n "+ qtdatributos +"\"] style=dotted; ");
+			gv.addln("QtdMethods [label=\"Qtd. Methods\\n"+ getCountMet +"\"] style=dotted;");
 			for (String m : metodos) { 				
-				gv.add (" \""+this.className+"\" -> "+m+";"); 
+				gv.addln ("\""+this.className+"\" -> "+m+";"); 
 			} 			
-			gv.addln("Attributes [label= \"Attributes\\n ");
+			gv.addln("Attributes [label=\"Attributes\\n ");
 			for (String a : attributes) { 
-				gv.add ("*"+a+";"); 
+				gv.add ("\n* "+a); 
 			} 			
-			gv.add(" \"style=\"dotted\" shape=\"box\"];");
+			gv.add("\" style=dotted];");
 			gv.addln(" \""+this.className+"\" -> Attributes");
 			gv.add(gv.end_graph());						
 			//out of file .dot 
+			System.out.println("========= Start Copy ========");
 			System.out.println(gv.getDotSource());
+			System.out.println("========= End Copy ========");
 			gv.increaseDpi();
 			
 			//Type file
 			String type = "png";
-			//File out = new File("/tmp/out"+gv.getImageDpi()+"."+ type);   // Linux
-			File out = new File(path+"."+ type);    // Windows
+			File out = new File("/tmp/out"+gv.getImageDpi()+"."+ type);   // Linux
+			//File out = new File(path+"."+ type);    // Windows
 			gv.writeGraphToFile( gv.getGraph(gv.getDotSource(),type,"dot"), out );
 							
 		} catch (Exception e) {
