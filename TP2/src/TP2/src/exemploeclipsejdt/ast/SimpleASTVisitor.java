@@ -15,14 +15,14 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 public class SimpleASTVisitor extends ASTVisitor {
 	private List<String> dependencies;	
 	private List<String> attributes;
-
+	private List<String> parameters; 
 	private CompilationUnit fullClass;
 	private String className;
 	
 	public SimpleASTVisitor(ICompilationUnit unit) throws Exception {
 		this.dependencies = new ArrayList<>();		
 		this.attributes = new ArrayList<>();
-		
+		this.parameters = new ArrayList<>();
 								
 		this.className = unit.getParent().getElementName() + "."
 				+ unit.getElementName().substring(0, unit.getElementName().length() - 5);
@@ -57,9 +57,14 @@ public class SimpleASTVisitor extends ASTVisitor {
 	public boolean visit(MethodDeclaration node) {
 		if (!node.isConstructor()){
 			dependencies.add(node.getName().toString());
+			parameters.addAll(node.parameters());
 		}
 		return true;
 	}		
+	
+	public List<String> getParameters(){
+		return parameters;
+	}
 	
 	public void gerarArq(String classe, String line, String qtdatributos, List<String>metodos, List<String>attributes, String getCountMet) {			
 		//generate file DOT (graph description language)		

@@ -1,5 +1,6 @@
 package exemploeclipsejdt.handlers;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,7 +10,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -55,24 +59,20 @@ public class SampleHandler extends AbstractHandler {
 		final ICompilationUnit unit = ((ICompilationUnit) JavaCore.create(file));
 		
 		final Collection<String> dependencies = new LinkedList<String>();
-
-		SimpleASTVisitor cv;
-		NumberofLine nl;
-		NumberOfAttributes na; 	
-		NumberofParameter np;
-		try {
-			np = new NumberofParameter(unit);
+		
+		
+		try {	
+			File test= new File("teste"); 				
 			
-			dependencies.addAll(cv.getDependencies());
-			//pega o nome da classe
-			 Iterator<String> list = np.LongParameterList().iterator();
-             while (list.hasNext()){
-            	 System.out.println(list.next());                      
-             }
-			//MessageDialog.openInformation(window.getShell(),
-			//		"Long ParameterList");
+			/*MessageDialog.openInformation(window.getShell(), "teste",
+					unit.getElementName().);*/
+			MessageDialog.openInformation(window.getShell(), "teste",
+					unit.getSource());
 			
-			
+			if (unit.getSource().contains("new File")) {
+				MessageDialog.openInformation(window.getShell(),null,"Classe faz acesso ao disco!");				
+			}
+								
 			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
