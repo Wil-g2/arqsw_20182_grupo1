@@ -7,7 +7,7 @@ Foo2;
 
 
 Bar -> OTalmetodoBBar;
-OTalmetodoBBar -> a, b, c, destaVez;
+OTalmetodoBBar -> a, b, c, outraVez;
 Foo [shape=box,style=filled,color="red"];
 Foo2 [shape=box,style=filled,color="red"];
 }
