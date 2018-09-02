@@ -14,6 +14,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -68,11 +69,8 @@ public class SampleHandler extends AbstractHandler {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		//raiz
 		IWorkspaceRoot root = workspace.getRoot();
-
 		//pega todos projetos
 		IProject[] projetos = root.getProjects();
-
-
 		Map<String, Double> peso = new HashMap<String, Double>();
 
 		peso.put("read",0.25);
@@ -95,7 +93,12 @@ public class SampleHandler extends AbstractHandler {
 					IJavaProject jprojeto = JavaCore.create(projeto);					
 					IPackageFragment [] pkgs = jprojeto.getPackageFragments();
 				    projectList.add(JavaCore.create(projeto));
-				    System.out.println(projectList.toString());
+				    IResource [] members = projeto.members();				    
+				    for (IResource member : members) {
+				    	 if (member instanceof IFile){
+				        }
+				    }
+				    //System.out.println(projectList.toString());				    
 					//IJavaElement [] je = jprojeto.				    				
 
 				}
@@ -106,8 +109,6 @@ public class SampleHandler extends AbstractHandler {
 		}
 
 		//List<IFile> files = (IFile) workbenchPart.getSite().getPage()
-
-
 		IFile file = (IFile) workbenchPart.getSite().getPage()
 				.getActiveEditor().getEditorInput().getAdapter(IFile.class);
 		if (file == null) {
@@ -128,8 +129,6 @@ public class SampleHandler extends AbstractHandler {
 					unit.getElementName().);*/
 			/*MessageDialog.openInformation(window.getShell(), "teste",
 					unit.getSource());*/
-
-
 			String codigo = unit.getSource(); 
 			int count = 0; 
 
@@ -147,15 +146,9 @@ public class SampleHandler extends AbstractHandler {
 					total=total*count;			
 					System.out.println(valor+":"+total);													
 				}
-				
-			
+						
 			//MessageDialog.openInformation(window.getShell(),null,total.toString());
-
-
-
-		}catch(
-
-				Exception e1)
+		}catch(Exception e1)
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
