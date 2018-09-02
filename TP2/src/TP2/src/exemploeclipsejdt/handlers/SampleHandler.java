@@ -4,11 +4,16 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
@@ -42,12 +47,35 @@ public class SampleHandler extends AbstractHandler {
 	 * the command has been executed, so extract extract the needed information
 	 * from the application context.
 	 */
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(ExecutionEvent event) throws ExecutionException {		
+		
 		IWorkbenchWindow window = HandlerUtil
 				.getActiveWorkbenchWindowChecked(event);
 
 		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage().getActivePart();
+		
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		//raiz
+		IWorkspaceRoot root = workspace.getRoot();
+		
+		//pega todos projetos
+		IProject[] projetos = root.getProjects(); 
+		
+		for (IProject projeto :projetos) {
+			try {
+				if (projeto.isAccessible()) {
+					System.out.println(projeto.getClass().toString()); 
+				}
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+		
+		//List<IFile> files = (IFile) workbenchPart.getSite().getPage()
+		
+		
 		IFile file = (IFile) workbenchPart.getSite().getPage()
 				.getActiveEditor().getEditorInput().getAdapter(IFile.class);
 		if (file == null) {
