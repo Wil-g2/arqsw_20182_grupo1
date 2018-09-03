@@ -7,7 +7,7 @@ class Bar
     function NovoMetodoABar($a, $b, $c){
 
     }
-    function OTalmetodoBBar($a, $b, $c, $destaVez){
+    function OTalmetodoBBar($a, $b, $c, $outraVez){
 
     }
 }
