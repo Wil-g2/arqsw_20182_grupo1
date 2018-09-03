@@ -65,48 +65,6 @@ public class SimpleASTVisitor extends ASTVisitor {
 	public List<String> getParameters(){
 		return parameters;
 	}
-	
-	public void gerarArq(String classe, String line, String qtdatributos, List<String>metodos, List<String>attributes, String getCountMet) {			
-		//generate file DOT (graph description language)		
 		
-		//path of file 
-		String path="C:\\temp.";
-		
-		//FileWriter file;
-		try {			
-			
-			GraphViz gv = new GraphViz();
-			gv.addln(gv.start_graph());		
-			gv.addln("node [shape=\"box\"];");
-			gv.addln(" \""+this.className+"\" [style=filled color=red];");			
-			gv.addln("LineofCode [label= \"Line of Code \\n"+ line +" \" style=\"dotted\" shape=\"box\"];");
-			gv.addln("QtdAttributes [label = \"Qtd. Attributes \\n "+ qtdatributos +" \" style=\"dotted\" shape=\"box\"]; ");
-			gv.addln("QtdMethods [label = \"Qtd. Methods \\n "+ getCountMet +"\" style=\"dotted\" shape=\"box\"];");
-			for (String m : metodos) { 				
-				gv.add (" \""+this.className+"\" -> "+m+";"); 
-			} 			
-			gv.addln("Attributes [label= \"Attributes\\n ");
-			for (String a : attributes) { 
-				gv.add ("*"+a+";"); 
-			} 			
-			gv.add(" \"style=\"dotted\" shape=\"box\"];");
-			gv.addln(" \""+this.className+"\" -> Attributes");
-			gv.add(gv.end_graph());						
-			//out of file .dot 
-			System.out.println(gv.getDotSource());
-			gv.increaseDpi();
-			
-			//Type file
-			String type = "png";
-			//File out = new File("/tmp/out"+gv.getImageDpi()+"."+ type);   // Linux
-			File out = new File(path+"."+ type);    // Windows
-			gv.writeGraphToFile( gv.getGraph(gv.getDotSource(),type,"dot"), out );
-							
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
 
 }
