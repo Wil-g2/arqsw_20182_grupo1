@@ -3,12 +3,14 @@ package exemploeclipsejdt.ast;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.plaf.synth.SynthSeparatorUI;
 import javax.swing.plaf.synth.SynthSplitPaneUI;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
@@ -21,6 +23,22 @@ import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.CatchClause;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+import org.eclipse.jdt.internal.formatter.TextEditsBuilder;
+
+import net.sourceforge.earticleast.app.Helper;
+import net.sourceforge.earticleast.app.VariableBindingManager;
 
 public class LCOM extends ASTVisitor{
 
@@ -30,14 +48,22 @@ public class LCOM extends ASTVisitor{
 	private Map<String, HashSet<String>> connectedComponents;
 	private Double lcomValue;
 	private String lcomType;
+	private CompilationUnit fullClass;
+	private String className;
+	private String nameMethod;
 	
 	public LCOM(ICompilationUnit unit) {
 		super();
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		this.className = unit.getParent().getElementName() + "."
+				+ unit.getElementName().substring(0, unit.getElementName().length() - 5);
+		
+		ASTParser parser = ASTParser.newParser(AST.JLS10);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(unit);
 		parser.setResolveBindings(true);
 		
+		this.fullClass = (CompilationUnit) parser.createAST(null); // parse
+		this.fullClass.accept(this);
 		sharedAttributesPerMethods = new HashMap<>();
 		nonSharedAttributesPerMethods = new HashMap<>();
 		connectedComponents = new HashMap<>();		
@@ -51,7 +77,7 @@ public class LCOM extends ASTVisitor{
 	public void getMethods(ICompilationUnit unit) {
 		
 		try {
-			/*IMethod[] methods = null;
+			IMethod[] methods = null;
 			IField[] fields = null; 
 			IType [] type = unit.getTypes();
 			for (IType iType : type){
@@ -63,19 +89,21 @@ public class LCOM extends ASTVisitor{
 				//System.out.println(me.getNumberOfParameters()); //conta quantidade de atributos da classe
 				//System.out.println(me.getSource());   //peda o código fonte do método
 				//System.out.println(me.getFlags());
-				System.out.println(me.getElementName()); //pega o nome dos métodos
-				System.out.println("getKey"+me.getKey());
-				System.out.println("getreturnType"+me.getReturnType());
-				System.out.println("getParameterType"+me.getParameterTypes());
-				System.out.println("getKey"+me.getRawParameterNames());				
+				//System.out.println(me.getElementName()); //pega o nome dos métodos
+				//System.out.println("getKey"+me.getKey());
+				//System.out.println("getreturnType"+me.getReturnType());
+				//System.out.println("getParameterType"+me.getParameterTypes());
+				//System.out.println("getKey"+me.getRawParameterNames());
+				//System.out.println("getJavadocRange"+me.getJavadocRange().toString());
 				
 			}
 			
 			for (IField fd: fields) {
 				//System.out.println(fd.getElementName());   //pega atributos da classe 
-				//System.out.println(fd.getDeclaringType()); //pega declaração da classe				
-			}*/
-			IMethod[] iMethods = null;
+				//System.out.println(fd.getDeclaringType()); //pega declaração da classe
+				//System.out.println("getConstrant"+fd.getConstant());				
+			}
+			/*IMethod[] iMethods = null;
 			IField[] iFields = null;
 			IType[] iTypes = unit.getTypes();
 			
@@ -97,7 +125,7 @@ public class LCOM extends ASTVisitor{
 				if (LCOMType.LCOM.toString() == getLcomType()){
 					setLcomValue(calculateLCOMValue());
 				}
-			}
+			}*/
 			
 		} catch (JavaModelException e) {
 			// TODO Auto-generated catch block
@@ -106,7 +134,36 @@ public class LCOM extends ASTVisitor{
 					
 	}
 	
-
+	@Override
+	public boolean visit(Javadoc node) {		
+		System.out.println(node.tags().toString());
+		return true;				
+	}
+	
+	@Override
+	public boolean visit(MethodDeclaration node){
+		nameMethod = node.getName().toString();
+		return true; 
+	}
+	
+	@Override
+	public boolean visit(CatchClause node) {  // visita todo os catchs 
+		//System.out.println("visitei o catch"+ node.getStartPosition() +" - ");
+		AST reast = node.getAST();
+		Block body;  
+		body = node.getBody();
+		List<Statement> stm = body.statements(); //pega o corpo do catch 
+		if (stm.isEmpty()){                      //verifica se está vazio. 
+			System.out.println("catch está vázio!");					
+		}else { 
+			for (Statement st : stm) {		
+			System.out.println(st.toString());
+			}
+		}	
+				
+		return true;
+	}
+	
 	public void checkMethodsWithSharedAttributes(IMethod[] methods) {
 		IScanner scanner = null;
 		for (IMethod method : methods) {

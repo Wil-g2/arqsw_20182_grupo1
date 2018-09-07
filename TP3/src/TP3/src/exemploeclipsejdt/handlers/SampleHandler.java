@@ -1,5 +1,6 @@
 package exemploeclipsejdt.handlers;
 
+import java.awt.Panel;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -26,6 +27,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
@@ -93,26 +96,26 @@ public class SampleHandler extends AbstractHandler {
 			ICompilationUnit: um arquivo de origem Java.
 			IImportDeclaration, IType, IField, IInitializer, IMethod: Filhos de ICompilationUnit. As informações fornecidas por esses nós também estão disponíveis na AST.*/
 		
-		for (IProject projeto :projetos) {
+		for (IProject projeto :projetos) {  //percorre todos projetos do eclipse
 			try {
-				if (projeto.isAccessible() & projeto.isOpen()) {
+				if (projeto.isAccessible() & projeto.isOpen()) {  //verifica se o projeto está acessível e aberto   
 					IJavaProject jprojeto = JavaCore.create(projeto);										
-					IPackageFragmentRoot [] pkgs = jprojeto.getPackageFragmentRoots();
+					IPackageFragmentRoot [] pkgs = jprojeto.getPackageFragmentRoots(); //arquivos do projeto
 					//IPackageFragment pf =  
 					//System.out.println( pkgs.length);
 					jprojeto.getAllPackageFragmentRoots();
-					IPackageFragment[] teste = jprojeto.getPackageFragments();
+					IPackageFragment[] teste = jprojeto.getPackageFragments();  //contém as classes java
 					
-					for (IPackageFragment fg : teste) {
-						ICompilationUnit [] unit = fg.getCompilationUnits();
+					for (IPackageFragment fg : teste) {                        //percorre os arquivos java
+						ICompilationUnit [] unit = fg.getCompilationUnits();   //cria um arquivo para ser analisado (ICompilationUnit contém todas informações da classe)
 						for (ICompilationUnit un : unit) {
 							sv = new SimpleASTVisitor(un);
 							System.out.println("-------------------- Metrics of Software ("+sv.getClassName()+")--------------------");							
 							//System.out.println(sv.getClassName()); 
-							ccv = new CyclomaticComplexityVisitor(un);							
+							//ccv = new CyclomaticComplexityVisitor(un);							
 							//System.out.println("Cyclomatic Complexity:"+ ccv.getAllCyclomaticComplexity());
 							//System.out.println("-------------------------------------------------------------");
-							noa = new NumberOfAttributes(un);
+							//noa = new NumberOfAttributes(un);
 							//System.out.println("Number of Attributes:"+ noa.getNumberOfAttributes());
 							//System.out.println("-------------------------------------------------------------");
 										
@@ -138,8 +141,7 @@ public class SampleHandler extends AbstractHandler {
 								}
 								//System.out.println("AFS:"+valorF);
 								//System.out.println("-------------------------------------------------------------");
-								//lcom = new LCOM(un); 
-																	
+								lcom = new LCOM(un);																							
 						}
 					}
 				    
