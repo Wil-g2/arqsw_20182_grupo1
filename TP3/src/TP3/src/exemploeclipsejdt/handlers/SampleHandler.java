@@ -1,5 +1,7 @@
 package exemploeclipsejdt.handlers;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,11 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -81,47 +85,45 @@ public class SampleHandler extends AbstractHandler {
 		IProject[] projetos = root.getProjects();		
 
 		/*
-		 * IJavaProject: … o nÛ do modelo Java e representa um projeto Java. Ele contÈm
-		 * IPackageFragmentRoots como nÛs filhos. IPackageFragmentRoot: pode ser uma
+		 * IJavaProject: √â o n√≥ do modelo Java e representa um projeto Java. Ele cont√©m
+		 * IPackageFragmentRoots como n√≥s filhos. IPackageFragmentRoot: pode ser uma
 		 * fonte ou uma pasta de classe de um projeto, um .zipou um .jararquivo.
-		 * IPackageFragmentRootpode conter arquivos bin·rios ou de origem.
-		 * IPackageFragment: Um ˙nico pacote. Ele contÈm ICompilationUnits ou
+		 * IPackageFragmentRootpode conter arquivos bin√°rios ou de origem.
+		 * IPackageFragment: Um √∫nico pacote. Ele cont√©m ICompilationUnits ou
 		 * IClassFiles, dependendo IPackageFragmentRootdo tipo de fonte ou do tipo
-		 * bin·rio. Observe que IPackageFragmentn„o est„o organizados como pai-filho.
-		 * Por exemplo, net.sf.an„o È o pai de net.sf.a.b. Eles s„o dois filhos
+		 * bin√°rio. Observe que IPackageFragmentn√£o est√£o organizados como pai-filho.
+		 * Por exemplo, net.sf.an√£o √© o pai de net.sf.a.b. Eles s√£o dois filhos
 		 * independentes do mesmo IPackageFragmentRoot. ICompilationUnit: um arquivo de
 		 * origem Java. IImportDeclaration, IType, IField, IInitializer, IMethod: Filhos
-		 * de ICompilationUnit. As informaÁıes fornecidas por esses nÛs tambÈm est„o
-		 * disponÌveis na AST.
+		 * de ICompilationUnit. As informa√ß√µes fornecidas por esses n√≥s tamb√©m est√£o
+		 * dispon√≠veis na AST.
 		 */
-
-		for (IProject projeto : projetos) { // percorre todos projetos do eclipse
+		LCOM lcom;
+		for (IProject projeto : projetos) { 											// percorre todos projetos do eclipse
 			try {
-				if (projeto.isAccessible() & projeto.isOpen()) { // verifica se o projeto est· acessÌvel e aberto
+				if (projeto.isAccessible() & projeto.isOpen()) { 						// verifica se o projeto est√° acess√≠vel e aberto
 					IJavaProject jprojeto = JavaCore.create(projeto);
-					IPackageFragmentRoot[] pkgs = jprojeto.getPackageFragmentRoots(); // arquivos do projeto
-					// IPackageFragment pf =
-					// System.out.println( pkgs.length);
+					IPackageFragmentRoot[] pkgs = jprojeto.getPackageFragmentRoots(); 	// arquivos do projeto
 					jprojeto.getAllPackageFragmentRoots();
-					IPackageFragment[] teste = jprojeto.getPackageFragments(); // contÈm as classes java
+					IPackageFragment[] teste = jprojeto.getPackageFragments(); 			// cont√©m as classes java
 
-					for (IPackageFragment fg : teste) { // percorre os arquivos java
-						ICompilationUnit[] unit = fg.getCompilationUnits(); // cria um arquivo para ser analisado
-																			// (ICompilationUnit contÈm todas
-																			// informaÁıes da classe)
+					for (IPackageFragment fg : teste) { 								// percorre os arquivos java
+						ICompilationUnit[] unit = fg.getCompilationUnits(); 			// cria um arquivo para ser analisado
+																						// (ICompilationUnit cont√©m todas
+																						// informa√ß√µes da classe)
 						for (ICompilationUnit un : unit) {
 							ASTParser parser = ASTParser.newParser(AST.JLS10);
 							parser.setKind(ASTParser.K_COMPILATION_UNIT);
 							parser.setSource(un);
 							parser.setResolveBindings(true);
 							CompilationUnit classUnit = (CompilationUnit) parser.createAST(null);
-							// inicia a modificaÁ„o da classe
+							// inicia a modifica√ß√£o da classe
 							classUnit.recordModifications();
 							AST ast = classUnit.getAST();
-							// MethodVisitor mv = new MethodVisitor();
-							// classUnit.accept(mv);
-							// Document document = new Document(un.getSource());
-
+							
+							lcom = new LCOM(un);
+							//lcom.getMethods(un);
+							System.out.println(lcom.lcom()); 
 						}
 					}
 
@@ -135,43 +137,11 @@ public class SampleHandler extends AbstractHandler {
 		IFile file = (IFile) workbenchPart.getSite().getPage().getActiveEditor().getEditorInput()
 				.getAdapter(IFile.class);
 		if (file == null) {
-			MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDT", "N„o existem arquivos abertos");
+			MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDT", "N√£o existem arquivos abertos");
 			return null;
 		}
 
 		final ICompilationUnit unit = ((ICompilationUnit) JavaCore.create(file));
-
-		try {
-
-			/*
-			 * CyclomaticComplexityVisitor ccv = new CyclomaticComplexityVisitor(unit);
-			 * System.out.
-			 * println("-------------------- Metrics of Software --------------------");
-			 * System.out.println("Cyclomatic Complexity:"+
-			 * ccv.getAllCyclomaticComplexity()); System.out.println(
-			 * "-------------------------------------------------------------");
-			 * NumberOfAttributes noa = new NumberOfAttributes(unit);
-			 * System.out.println("Number of Attributes:"+ noa.getNumberOfAttributes());
-			 * System.out.println(
-			 * "-------------------------------------------------------------");
-			 * 
-			 * Double total = 0.0; String codigo = unit.getSource(); int count = 0;
-			 * BigDecimal valorF = null; Pattern pattern; Matcher matcher;
-			 * 
-			 * for (String valor: busca.keySet()) { pattern =
-			 * Pattern.compile(busca.get(valor)); matcher = pattern.matcher(codigo);
-			 * count=0; //total=0.0; while (matcher.find()) { count++; }
-			 * total+=peso.get(valor); total=total*count; valorF =
-			 * BigDecimal.valueOf(total).setScale(2, RoundingMode.DOWN);
-			 * //System.out.println(valor+":"+valorF); } System.out.println("AFS:"+valorF);
-			 * System.out.println(
-			 * "-------------------------------------------------------------");
-			 */
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		return null;
 
 	}
