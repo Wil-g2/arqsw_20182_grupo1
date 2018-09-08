@@ -1,5 +1,6 @@
 package exemploeclipsejdt.handlers;
 
+import java.awt.image.RasterFormatException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ import exemploeclipsejdt.ast.CyclomaticComplexityVisitor;
 import exemploeclipsejdt.ast.LCOM;
 import exemploeclipsejdt.ast.MethodVisitor;
 import exemploeclipsejdt.ast.NumberOfAttributes;
+import exemploeclipsejdt.ast.Refactor;
 import exemploeclipsejdt.ast.SimpleASTVisitor;
 
 /**
@@ -98,7 +100,7 @@ public class SampleHandler extends AbstractHandler {
 		 * de ICompilationUnit. As informações fornecidas por esses nós também estão
 		 * disponíveis na AST.
 		 */
-		LCOM lcom;
+		Refactor rf;
 		for (IProject projeto : projetos) { 											// percorre todos projetos do eclipse
 			try {
 				if (projeto.isAccessible() & projeto.isOpen()) { 						// verifica se o projeto está acessível e aberto
@@ -121,9 +123,7 @@ public class SampleHandler extends AbstractHandler {
 							classUnit.recordModifications();
 							AST ast = classUnit.getAST();
 							
-							lcom = new LCOM(un);
-							//lcom.getMethods(un);
-							System.out.println(lcom.lcom()); 
+							rf = new Refactor(un);
 						}
 					}
 
