@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.soap.Node;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMember;
@@ -24,10 +27,15 @@ import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class LCOM extends ASTVisitor {
 
@@ -137,20 +145,64 @@ public class LCOM extends ASTVisitor {
 	public boolean visit(MethodDeclaration node) {				
 		Block md = node.getBody();
 		//System.out.println(md.getParent().toString());
-		List <Block> bloskd = md.statements();
+		List <Block> bloskd = md.statements();		
+		SimpleName sn = node.getName();
+		System.out.println("MethodDeclaration "+ sn.getIdentifier());  //indentifier do method
+		//VariableDeclarationFragment vf = (VariableDeclarationFragment) md.statements();
+		//System.out.println(vf.getName());  
 	
 		return true; 
 	}
 	
 	
+	public boolean visit(SimpleName node) {
+
+	    IBinding binding = node.resolveBinding();	    
+
+	    if (binding instanceof IVariableBinding) {
+
+	        IVariableBinding variable = (IVariableBinding) binding;
+	        
+	        if (variable.isField()) {    	        	
+	          //System.out.println("Method:"+((IVariableBinding) binding).getDeclaringMethod().getName());	
+	          //System.out.println("field: " + node.toString());
+	        }
+	    }
+
+	    return super.visit(node);
+	}
+	
+	public boolean visit(VariableDeclarationStatement node) {		
+		//System.out.println(node.getType());		
+		//System.out.println(node.getParent());		
+		return true; 
+	}
+	
+	public boolean visit(VariableDeclarationFragment node) {
+		//System.out.println("key:"+node.resolveBinding().getKey()); 
+		//System.out.println("fieldacess "+node.getInitializer().FIELD_ACCESS);
+		//System.out.println("GetName "+ node.getName());		
+		//System.out.println("GetType "+ node.getNodeType());
+		//System.out.println("GetNodeType "+ node.getName().getNodeType());
+		//System.out.println("GetFlags "+ node.getName().getFlags());
+		//System.out.println("GetRelsoveType"+node.resolveBinding().getType().toString());
+		//System.out.println("GetFlags"+node.getFlags());
+		//System.out.println("GetResolveKind"+node.resolveBinding().getKind());
+		//System.out.println("GetResolveModifiers"+node.resolveBinding().getModifiers());	
+		SimpleName sn = node.getName();
+		System.out.println("VariableDeclarationFragnment "+sn);
+		return true;
+		
+	}
+	
 	public boolean visit(TypeDeclaration node) {
-	 System.out.println(" TypeDeclaration");	
+	 //System.out.println(" TypeDeclaration");	
 	  return true;	
 	}
 	
 	
 	public boolean visit(VariableDeclaration node) {
-		System.out.println(" variable");		
+		//System.out.println(" variable");		
 		return true;		
 	}
 	
