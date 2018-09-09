@@ -4,8 +4,11 @@ import java.awt.image.RasterFormatException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -55,6 +58,7 @@ import exemploeclipsejdt.ast.MethodVisitor;
 import exemploeclipsejdt.ast.NumberOfAttributes;
 import exemploeclipsejdt.ast.Refactor;
 import exemploeclipsejdt.ast.SimpleASTVisitor;
+import exemploeclipsejdt.ast.TestLCOM;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -119,11 +123,53 @@ public class SampleHandler extends AbstractHandler {
 							parser.setSource(un);
 							parser.setResolveBindings(true);
 							CompilationUnit classUnit = (CompilationUnit) parser.createAST(null);
-							// inicia a modificação da classe
+							// initiazer modofied class
 							classUnit.recordModifications();
 							AST ast = classUnit.getAST();
 							
-							rf = new Refactor(un);
+							TestLCOM lcom = new TestLCOM(un);									
+							System.out.println(lcom.getLcomValue().toString()); 
+							
+							Map<String, HashSet<String>> refatorClass = new HashMap<>();
+							Map<String, HashSet<String>> copyRefatorClass = new HashMap<>();
+							List<String> attributeExclusive = new ArrayList<>();
+							refatorClass = lcom.getResult();
+							copyRefatorClass = lcom.getResult();
+							int count = 0;
+							for (Iterator<HashSet<String>> it = refatorClass.values().iterator(); it.hasNext();) { 
+								Set<String> methods = it.next();
+								if (methods.size() == 1){    //use in one method									
+									for (String m: methods) { 
+										for (Iterator<HashSet<String>> itCopy = copyRefatorClass.values().iterator(); itCopy.hasNext();) {
+											Set<String> methodsCopy = itCopy.next();
+											if(methodsCopy.size()>1) {  //addEndereco, addPessoa
+												count=0;
+												/*for (String method: methodsCopy) {													
+													if(method.equals(m)) {
+														continue;
+													}else {
+														count++;
+													}
+												}*/
+												if(!methodsCopy.contains(m)) {
+													//attributeExclusive.add(m);
+													count++;
+												}
+											}	
+										}
+										/*if (count==1) {
+											attributeExclusive.add(m);
+										}*/
+										if (count>0) {
+											attributeExclusive.add(m);
+										}
+									}	
+									
+								}
+							}
+							
+							System.out.println(attributeExclusive.toString()); 
+							
 						}
 					}
 
