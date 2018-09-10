@@ -2,25 +2,26 @@ package teste;
 
 public class Pessoa {
 	
-	public int id; 
+	private String id; 
 	private String cpf; 
 	private String nome; 
 	private String rua; 
 	private String numero;
 	private String cidade; 
 	private String bairro; 
-	public String estado;
+	private String estado;
+	private String pais;
 	
 	public void addPessoa() {	
-		String nome = this.nome;String rua1 = this.rua;
-		String rua = this.rua;
-		System.out.println("Id:"+String.valueOf(this.id)+" Nome:"+this.nome+" CPF:"+this.cpf);	
+		System.out.println(this.id + this.nome + this.cpf);
+		System.out.println(this.rua + this.numero + this.bairro + this.cidade);
 	}
 	
 	public void addEndereco() {		
-		String rua = this.rua;
-		//System.out.println("Endereço: "+ this.rua + " Número:"+ this.numero + " Bairro:"+this.bairro+" Cidade:"+this.cidade+" Estado:"+this.estado);		
+		System.out.println(this.rua + this.numero + this.bairro + this.cidade);		
 	}
-
 	
+	public void addEstadoPais() {		
+		System.out.println(this.estado + this.pais);		
+	}
 }
