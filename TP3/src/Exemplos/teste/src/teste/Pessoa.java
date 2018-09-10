@@ -12,6 +12,7 @@ public class Pessoa {
 	private String estado;
 	private String pais;
 	
+	
 	public void addPessoa() {	
 		System.out.println(this.id + this.nome + this.cpf);
 		System.out.println(this.rua + this.numero + this.bairro + this.cidade);
