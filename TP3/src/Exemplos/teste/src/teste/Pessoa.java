@@ -11,6 +11,8 @@ public class Pessoa {
 	private String bairro; 
 	private String estado;
 	private String pais;
+	private String estado2;
+	private String pais2;
 	
 	
 	public void addPessoa() {	
@@ -24,5 +26,8 @@ public class Pessoa {
 	
 	public void addEstadoPais() {		
 		System.out.println(this.estado + this.pais);		
+	}
+	public void addEstadoPais2() {		
+		System.out.println(this.estado2 + this.pais2);		
 	}
 }
