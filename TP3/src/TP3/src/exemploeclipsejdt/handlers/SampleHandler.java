@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -51,6 +52,8 @@ import org.eclipse.ui.PlatformUI;
 
 import org.eclipse.jface.*;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import exemploeclipsejdt.ast.CyclomaticComplexityVisitor;
 import exemploeclipsejdt.ast.LCOM;
@@ -127,17 +130,24 @@ public class SampleHandler extends AbstractHandler {
 							classUnit.recordModifications();
 							AST ast = classUnit.getAST();
 							
-							TestLCOM lcom = new TestLCOM(un);									
-							System.out.println(lcom.getLcomValue().toString()); 
+							TestLCOM lcom = new TestLCOM(un);																
 							
+							JSONObject json = new JSONObject();
+							JSONArray jsonAttributes = new JSONArray();
 							Map<String, HashSet<String>> refatorClass = new HashMap<>();
 							Map<String, HashSet<String>> copyRefatorClass = new HashMap<>();
 							List<String> attributeExclusive = new ArrayList<>();
 							refatorClass = lcom.getResult();
 							copyRefatorClass = lcom.getResult();
-							int count = 0;
-							for (Iterator<HashSet<String>> it = refatorClass.values().iterator(); it.hasNext();) { 
-								Set<String> methods = it.next();
+							int count = 0, i = 0;						
+							
+							json.put("class", lcom.getClasse());
+							
+							
+							for (Iterator<HashSet<String>> it = refatorClass.values().iterator(); it.hasNext();i++) { 
+								Set<String> methods = it.next();								
+								//HashSet<String> key = (HashSet<String>)it.next();
+								//Set<Entry<String, HashSet<String>>> keys = refatorClass.entrySet();
 								if (methods.size() == 1){    //use in one method									
 									for (String m: methods) { 
 										for (Iterator<HashSet<String>> itCopy = copyRefatorClass.values().iterator(); itCopy.hasNext();) {
@@ -161,15 +171,33 @@ public class SampleHandler extends AbstractHandler {
 											attributeExclusive.add(m);
 										}*/
 										if (count>0) {
-											attributeExclusive.add(m);
+											if (!attributeExclusive.contains(m)){
+												attributeExclusive.add(m);			
+											}
+											//json.put("method", m);											
 										}
 									}	
 									
 								}
 							}
 							
-							System.out.println(attributeExclusive.toString()); 
+							//json.put("attributes", jsonAttributes);
+							//System.out.println(attributeExclusive.toString());
+							//System.out.println(json.toString());
 							
+							if (attributeExclusive.isEmpty()) {
+								System.out.println("==================================================");
+								System.out.println("PACOTE.CLASSE:"+lcom.getClasse());
+								System.out.println("CLASSE ESTÁ COESA PARABÉNS!");
+								System.out.println("==================================================");
+							}else { 
+								System.out.println("==================================================");
+								System.out.println("SUGESTÃO DE ANALISE PARA REFATORAÇÃO DO PROJETO");
+								System.out.println("PACOTE.CLASSE:"+lcom.getClasse());
+								System.out.println("MÉTODOS COM ATRIBUTOS EXCLUSIVOS:"+attributeExclusive.toString());
+								System.out.println("AVALIE A EXECUSÃO DE UM EXTRACT CLASS PARA MELHORAR A COESÃO!");
+								System.out.println("==================================================");
+							}
 						}
 					}
 

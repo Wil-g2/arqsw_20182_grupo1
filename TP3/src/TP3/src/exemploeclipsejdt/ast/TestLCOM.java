@@ -240,4 +240,8 @@ public class TestLCOM extends ASTVisitor {
 	public Double getLcom4Value() {
 		return lcom4Value;
 	}
+	
+	public String getClasse() {
+		return this.className;
+	}
 }
