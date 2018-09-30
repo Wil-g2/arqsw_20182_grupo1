@@ -13,8 +13,11 @@ Projetos para a disciplina de Arquitetura de Software (Ufla/2018) - Prof. Ricard
 * [TP3](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP3) - Trabalho sobre Refatoração
   * [/src](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP3/src)
   * [Apresentação](https://github.com/rterrabh/arqsw_20182_grupo1/blob/master/TP3/apresentacao.pdf)
+* [TP4](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP4) - Trabalho sobre Refatoração
+  * [/src](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP4/src)
+  * [Apresentação](https://github.com/rterrabh/arqsw_20182_grupo1/blob/master/TP4/apresentacao.pdf)  
   
 ## Participantes
 
 * **Alberane Lucio** - *Aluno* - [alberane](https://github.com/alberane)
-* **William Rezende** - *Aluno* - [Wil-g2](https://github.com/Wil-g2)
+* **Willian Rezende** - *Aluno* - [Wil-g2](https://github.com/Wil-g2)
