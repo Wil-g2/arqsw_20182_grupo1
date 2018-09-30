@@ -13,15 +13,17 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.ui.internal.ShowInMenu;
 
 public class VerifySingleton extends ASTVisitor {
 	List<String> msg = new ArrayList<String>();
-	public VerifySingleton(ICompilationUnit unit) throws JavaModelException, MalformedTreeException, BadLocationException {
+	public VerifySingleton(ICompilationUnit unit, boolean edit) throws JavaModelException, MalformedTreeException, BadLocationException {
 		Document document = new Document(unit.getSource());
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -44,20 +46,27 @@ public class VerifySingleton extends ASTVisitor {
 					for (MethodDeclaration m1 : type.getMethods()) {
 						List<Modifier> mod = m1.modifiers();
 						int modificador1 = m1.getModifiers();
-						if (m1.isConstructor()) {							
+						if (m1.isConstructor()) {							//verifica se cosntrutor						
 							if (!((modificador1 & privado) == privado)) {
-								setPrivateMethod(m1);
-								construtor = true;
-								msg.add("Alteração do cosntrutor para private. ");
+								if (edit) { 
+									setPrivateMethod(m1);							
+									construtor = true;
+									msg.add("Alteração do método ("+m1.getName()+") cosntrutor para private. \r");
+								}else {
+									msg.add("construtor precisa ser alterado apra private. \r");
+								}														
 							}
 						}
 						if ((m1.getName().getIdentifier().startsWith("getInstanc"))) {
 
 							if (!((modificador1 & sincronized) == sincronized)) {
-								mod.add(2, ast.newModifier(Modifier.ModifierKeyword.SYNCHRONIZED_KEYWORD));
-								instancia = true;
-								msg.add("'synchronized' foi adicionado! ");
-
+								if (edit) {
+									mod.add(2, ast.newModifier(Modifier.ModifierKeyword.SYNCHRONIZED_KEYWORD));
+									msg.add(" 'synchronized' foi adicionado! \r ");
+									instancia = true;
+								}else {
+									msg.add(" synchronized precisa ser adicionado método ("+m1.getName()+") . \r ");
+								}								
 							}
 
 						}
@@ -67,25 +76,31 @@ public class VerifySingleton extends ASTVisitor {
 					// Percorre atributos do projeto
 					for (FieldDeclaration f : type.getFields()) {
 						int publico = Modifier.ModifierKeyword.PUBLIC_KEYWORD.toFlagValue();
-						int tipo = f.getModifiers();
+						int tipo = f.getModifiers();												
 						// verifica atributo
 						if ((tipo & publico) == publico) {
 							atributo = true;
-							setPrivateField(f);
-							msg.add("O atributo da classe foi modificado para 'private'! ");
+							if (edit) { 							
+								setPrivateField(f);
+								msg.add("O atributo da classe foi modificado para 'private'! \r ");
+							}else {
+								msg.add("O atributo "+f.fragments().toString()+" da classe precisa ser alterado para private. \r");
+							}
+							
+							
 						}
 
 					}
 				}
 
-				if (instancia || construtor || atributo) {
+				if ((instancia || construtor || atributo)& edit) {
 					TextEdit edits = compUnit.rewrite(document, unit.getJavaProject().getOptions(true));
 					edits.apply(document);
 					String newSource = document.get();
 					unit.getBuffer().setContents(newSource);
-				} else
-					msg.add("Padrão Singleton correto.");
-				
+					msg.add("Padrão Singleton correto. \r");
+				} else 					
+					msg.add(" Ajuste a classe para ficar no Padrão Singleton. \r");								
 
 			}
 	
@@ -116,6 +131,6 @@ public class VerifySingleton extends ASTVisitor {
 	}
 		
 	public String getMsg() {
-		return msg.toStrig();
+		return msg.toString();
 	}
 }
