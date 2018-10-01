@@ -53,7 +53,7 @@ public class VerifySingleton extends ASTVisitor {
 									construtor = true;
 									msg.add("Alteração do método ("+m1.getName()+") cosntrutor para private. \r");
 								}else {
-									msg.add("construtor precisa ser alterado apra private. \r");
+									msg.add("construtor precisa ser alterado para private. \r");
 								}														
 							}
 						}
@@ -82,7 +82,7 @@ public class VerifySingleton extends ASTVisitor {
 							atributo = true;
 							if (edit) { 							
 								setPrivateField(f);
-								msg.add("O atributo da classe foi modificado para 'private'! \r ");
+								msg.add("O atributo da classe foi modificado para private. \r ");
 							}else {
 								msg.add("O atributo "+f.fragments().toString()+" da classe precisa ser alterado para private. \r");
 							}
