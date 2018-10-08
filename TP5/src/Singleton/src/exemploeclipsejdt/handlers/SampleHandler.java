@@ -83,9 +83,10 @@ public class SampleHandler extends AbstractHandler {
 	 * the command has been executed, so extract extract the needed information from
 	 * the application context.
 	 */	
+	
 	private String pkgModel = JOptionPane.showInputDialog("Entre com pacote Model ?");
 	private String PkgView = JOptionPane.showInputDialog("Entre com pacote View ?");;
-	private String pkgPresenter = JOptionPane.showInputDialog("Entre com pacote Presenter ?");	
+	private String pkgPresenter = JOptionPane.showInputDialog("Entre com pacote Presenter ?");
 
 	Map<String, IPackageFragment> pkgInformation = new HashMap<>();
 
@@ -122,12 +123,12 @@ public class SampleHandler extends AbstractHandler {
 	 * } } } } catch (Exception e) {
 	 * System.out.println("Erro ao tentar ler o projeto."); } } return null; }
 	 */
-	
+
 	private Set<String> getPacksMVP() {
 		return new HashSet<>(Arrays.asList(pkgModel, PkgView, pkgPresenter));
-		
+
 	}
-	
+
 	/**
 	 * configuração das retrições do padrão MVP
 	 * 
@@ -135,11 +136,11 @@ public class SampleHandler extends AbstractHandler {
 	private Map<String, Set<String>> getConstraints() {
 		Map<String, Set<String>> constraints = new HashMap<>();
 		constraints.put(PkgView, new HashSet<>(Arrays.asList(pkgModel)));
-		//constraints.put(pkgPresenter, new HashMap<>(Arrays.asList()));
+		constraints.put(pkgPresenter, new HashSet<>(Arrays.asList("")));
 		constraints.put(pkgModel, new HashSet<>(Arrays.asList(PkgView, pkgPresenter)));
 		return constraints;
 	}
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
@@ -147,8 +148,7 @@ public class SampleHandler extends AbstractHandler {
 		try {
 			getWorkspaceInfo();
 		} catch (Exception e) {
-			MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDTPlugin",
-					"Problema na execução!");
+			MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDTPlugin", "Problema na execução!");
 			e.printStackTrace();
 		}
 		MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDTPlugin", log.toString());
@@ -162,13 +162,18 @@ public class SampleHandler extends AbstractHandler {
 	 */
 	private void getWorkspaceInfo() throws CoreException {
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IWorkspaceRoot root = workspace.getRoot();
-		IProject[] projects = root.getProjects();
-		for (IProject project : projects) {
-			if (project.isOpen() && project.isAccessible()) {
-				IJavaProject javaProject = JavaCore.create(project);
-				accessVerify(javaProject);
+		IWorkspace workspace = ResourcesPlugin.getWorkspace(); // raiz IWorkspaceRoot
+		IWorkspaceRoot root = workspace.getRoot(); // pega todos projetos
+		IProject[] projetos = root.getProjects();
+		for (IProject projeto : projetos) { // percorre todos projetos do eclipse
+			try {
+				if (projeto.isAccessible() & projeto.isOpen()) { //
+					// verifica se o projeto está acessível e aberto
+					IJavaProject jprojeto = JavaCore.create(projeto);
+					accessVerify(jprojeto);
+				}
+			} catch (Exception e) {
+				System.out.println("erro ao lero o projeto. "+ e.getMessage() );	
 			}
 		}
 
@@ -185,7 +190,7 @@ public class SampleHandler extends AbstractHandler {
 		for (IPackageFragment p : javaProject.getPackageFragments()) {
 			if (pakgsAnalysis.contains(p.getElementName())) {
 				String analyzed = p.getElementName();
-				log.append(String.format("Análise do pacote '%s'\n", analyzed));
+				log.append(String.format("pacote analisado '%s'\n", analyzed));
 				Set<String> currentRestriction = constraints.get(analyzed);
 				boolean violation = false;
 				for (ICompilationUnit unit : p.getCompilationUnits()) {
@@ -196,17 +201,18 @@ public class SampleHandler extends AbstractHandler {
 						}
 						String currentPack = projectInfo.get(dependency).getElementName();
 						if (currentRestriction.contains(currentPack)) {
-							violation = true;
-							log.append(String.format("pacote:'%s' - Classe '%s' acessa a seguinte classe '%s'.!\n",
-									currentPack, unit.getElementName(), dependency));
+							violation = true;							
+							log.append(String.format(
+									"Classe: '%s' -> acessa a classe: '%s' pacote: '%s'!\n",
+									unit.getElementName(), dependency, currentPack));
 						}
 					}
 
 				}
 				if (!violation) {
-					log.append("Sem violação \n ");
+					log.append("Sem violação no padrão arquitetural \n ");
 				}
-				
+
 			}
 		}
 
@@ -285,15 +291,14 @@ public class SampleHandler extends AbstractHandler {
 		return typeDeclarations;
 	}
 
-	
 	/**
-	 *tipos de depenência de uma classe 
+	 * tipos de depenência de uma classe
 	 * 
 	 */
 	private Set<String> getTypeDepencies(ICompilationUnit unit) throws JavaModelException {
 		Set<String> typesDepencies = new HashSet<>();
 		ArrayList<MethodDeclaration> methods = methodsParser(unit);
-		for (MethodDeclaration m : methods) {			
+		for (MethodDeclaration m : methods) {
 			typesDepencies.addAll(getTypeDependencies(m.getBody()));
 			typesDepencies.addAll(getTypeDepencies(m.parameters()));
 		}
@@ -329,7 +334,7 @@ public class SampleHandler extends AbstractHandler {
 	}
 
 	/**
-	 *conjunto de dependências a serem comparados  
+	 * conjunto de dependências a serem comparados
 	 * 
 	 */
 	void addDependencieSet(Type type, Set<String> dependencies) {
@@ -350,7 +355,7 @@ public class SampleHandler extends AbstractHandler {
 	Set<String> getTypeDependenciesBodyStatement(Statement statement) {
 		if (statement instanceof Block) {
 			return getTypeDependencies((Block) statement);
-		} 
+		}
 		if (statement instanceof VariableDeclarationStatement) {
 			Set<String> typesDependencies = new HashSet<>();
 			VariableDeclarationStatement variableDeclaration = ((VariableDeclarationStatement) statement);
@@ -365,22 +370,22 @@ public class SampleHandler extends AbstractHandler {
 		for (Statement statement : (List<Statement>) block.statements()) {
 			if (statement instanceof Block) {
 				typesDepencies.addAll(getTypeDependencies(block));
-			} else if (statement instanceof DoStatement) { 
+			} else if (statement instanceof DoStatement) {
 				typesDepencies.addAll(getTypeDependenciesBodyStatement(((DoStatement) statement).getBody()));
 			} else if (statement instanceof WhileStatement) {
-				typesDepencies.addAll(getTypeDependenciesBodyStatement(((WhileStatement) statement).getBody())); 
+				typesDepencies.addAll(getTypeDependenciesBodyStatement(((WhileStatement) statement).getBody()));
 			} else if (statement instanceof EnhancedForStatement) {
 				typesDepencies.addAll(getTypeDependenciesBodyStatement(((EnhancedForStatement) statement).getBody()));
 			} else if (statement instanceof ForStatement) {
-				typesDepencies.addAll(getTypeDependenciesBodyStatement(((ForStatement) statement).getBody())); 
+				typesDepencies.addAll(getTypeDependenciesBodyStatement(((ForStatement) statement).getBody()));
 			} else if (statement instanceof IfStatement) {
-				IfStatement ifStatement = (IfStatement) statement; 
+				IfStatement ifStatement = (IfStatement) statement;
 				typesDepencies.addAll(getTypeDependenciesBodyStatement(ifStatement.getThenStatement()));
 				Statement elseStatement = ifStatement.getElseStatement();
-				if (elseStatement != null) { 
+				if (elseStatement != null) {
 					typesDepencies.addAll(getTypeDependenciesBodyStatement(elseStatement));
 				}
-			} else if (statement instanceof SwitchStatement) { 
+			} else if (statement instanceof SwitchStatement) {
 				for (Statement st : (List<Statement>) (((SwitchStatement) statement).statements())) {
 					typesDepencies.addAll(getTypeDependenciesBodyStatement(st));
 				}
@@ -392,7 +397,7 @@ public class SampleHandler extends AbstractHandler {
 		return typesDepencies;
 	}
 
-	private ArrayList<MethodDeclaration> methodsParser(ICompilationUnit unit) throws JavaModelException {		
+	private ArrayList<MethodDeclaration> methodsParser(ICompilationUnit unit) throws JavaModelException {
 		CompilationUnit compUnit = getComplilationUnit(unit);
 		compUnit.recordModifications();// modificação do registro
 		AST ast = compUnit.getAST();
