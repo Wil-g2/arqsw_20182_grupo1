@@ -1,0 +1,5 @@
+{
+  "database": ["80%","PDO","mysql_","mysqli_","sqlite", "mssql_"],
+  "security": ["60%","mcrip", "openssl_", "mhash"],
+  "mail":     ["80%","mail", "PHPMailer"]
+}
