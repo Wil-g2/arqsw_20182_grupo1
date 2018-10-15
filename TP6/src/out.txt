@@ -1,0 +1,442 @@
+====> File ../../A.php:
+==> Node dump:
+array(
+    0: Stmt_Namespace(
+        name: Name(
+            parts: array(
+                0: NS1
+            )
+        )
+        stmts: array(
+            0: Stmt_Class(
+                flags: 0
+                name: Identifier(
+                    name: A
+                )
+                extends: null
+                implements: array(
+                )
+                stmts: array(
+                    0: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA1
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                    1: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA2
+                        )
+                        params: array(
+                            0: Param(
+                                type: null
+                                byRef: false
+                                variadic: false
+                                var: Expr_Variable(
+                                    name: imap_stream
+                                )
+                                default: null
+                            )
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Expression(
+                                expr: Expr_Assign(
+                                    var: Expr_Variable(
+                                        name: imap_obj
+                                        comments: array(
+                                            0: //metodo acesso a email
+                                        )
+                                    )
+                                    expr: Expr_FuncCall(
+                                        name: Name(
+                                            parts: array(
+                                                0: imap_check
+                                            )
+                                        )
+                                        args: array(
+                                            0: Arg(
+                                                value: Expr_Variable(
+                                                    name: imap_stream
+                                                )
+                                                byRef: false
+                                                unpack: false
+                                            )
+                                        )
+                                    )
+                                    comments: array(
+                                        0: //metodo acesso a email
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo acesso a email
+                                )
+                            )
+                            1: Stmt_Expression(
+                                expr: Expr_FuncCall(
+                                    name: Name(
+                                        parts: array(
+                                            0: var_dump
+                                        )
+                                    )
+                                    args: array(
+                                        0: Arg(
+                                            value: Expr_Variable(
+                                                name: imap_obj
+                                            )
+                                            byRef: false
+                                            unpack: false
+                                        )
+                                    )
+                                )
+                            )
+                            2: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: true
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                    2: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA3
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                    3: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA4
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                    4: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: Metod5
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        comments: array(
+            0: //sem definição de uso de métodos, sugestão de namespace (<<NS_Atual>> / Generic)
+        )
+    )
+)
+==> Pretty print:
+<?php
+
+//sem definição de uso de métodos, sugestão de namespace (<<NS_Atual>> / Generic)
+namespace NS1;
+
+class A
+{
+    public function MetodA1()
+    {
+        //metodo vasio
+        return false;
+    }
+    public function MetodA2($imap_stream)
+    {
+        //metodo acesso a email
+        $imap_obj = imap_check($imap_stream);
+        var_dump($imap_obj);
+        return true;
+    }
+    public function MetodA3()
+    {
+        //metodo vasio
+        return false;
+    }
+    public function MetodA4()
+    {
+        //metodo vasio
+        return false;
+    }
+    public function Metod5()
+    {
+        //metodo vasio
+        return false;
+    }
+}
+==> Resolved names.
+==> Node dump:
+array(
+    0: Stmt_Namespace(
+        name: Name(
+            parts: array(
+                0: NS1
+            )
+        )
+        stmts: array(
+            0: Stmt_Class(
+                flags: 0
+                name: Identifier(
+                    name: A
+                )
+                extends: null
+                implements: array(
+                )
+                stmts: array(
+                    0: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA1
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                    1: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA2
+                        )
+                        params: array(
+                            0: Param(
+                                type: null
+                                byRef: false
+                                variadic: false
+                                var: Expr_Variable(
+                                    name: imap_stream
+                                )
+                                default: null
+                            )
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Expression(
+                                expr: Expr_Assign(
+                                    var: Expr_Variable(
+                                        name: imap_obj
+                                        comments: array(
+                                            0: //metodo acesso a email
+                                        )
+                                    )
+                                    expr: Expr_FuncCall(
+                                        name: Name(
+                                            parts: array(
+                                                0: imap_check
+                                            )
+                                        )
+                                        args: array(
+                                            0: Arg(
+                                                value: Expr_Variable(
+                                                    name: imap_stream
+                                                )
+                                                byRef: false
+                                                unpack: false
+                                            )
+                                        )
+                                    )
+                                    comments: array(
+                                        0: //metodo acesso a email
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo acesso a email
+                                )
+                            )
+                            1: Stmt_Expression(
+                                expr: Expr_FuncCall(
+                                    name: Name(
+                                        parts: array(
+                                            0: var_dump
+                                        )
+                                    )
+                                    args: array(
+                                        0: Arg(
+                                            value: Expr_Variable(
+                                                name: imap_obj
+                                            )
+                                            byRef: false
+                                            unpack: false
+                                        )
+                                    )
+                                )
+                            )
+                            2: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: true
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                    2: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA3
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                    3: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: MetodA4
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                    4: Stmt_ClassMethod(
+                        flags: MODIFIER_PUBLIC (1)
+                        byRef: false
+                        name: Identifier(
+                            name: Metod5
+                        )
+                        params: array(
+                        )
+                        returnType: null
+                        stmts: array(
+                            0: Stmt_Return(
+                                expr: Expr_ConstFetch(
+                                    name: Name(
+                                        parts: array(
+                                            0: false
+                                        )
+                                    )
+                                )
+                                comments: array(
+                                    0: //metodo vasio
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        comments: array(
+            0: //sem definição de uso de métodos, sugestão de namespace (<<NS_Atual>> / Generic)
+        )
+    )
+)
