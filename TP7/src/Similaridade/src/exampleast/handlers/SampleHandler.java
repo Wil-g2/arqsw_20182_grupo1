@@ -51,15 +51,21 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import exampleast.util.DadosSimilarity;
+import exampleast.util.SimilarityData;
 import exampleast.util.Dependency;
 import exampleast.util.MoveClass;
-import exampleast.util.TypeVisitorAST;
+import exampleast.util.VisitorAST;
 import exampleast.util.Utils;
 import exampleast.util.View;
 
 public class SampleHandler extends AbstractHandler {
-
+	/**
+	 * The constructor.
+	 */
+	public SampleHandler() {
+	}
+	
+	
 	public Map<String, Set<ICompilationUnit>> getInformations() {
 		return informations;
 	}
@@ -72,7 +78,7 @@ public class SampleHandler extends AbstractHandler {
 	ArrayList<String> classes = new ArrayList<>();
 	Map<IPackageFragment, Set<ICompilationUnit>> estrutura = new HashMap<>();
 
-	public static ArrayList<DadosSimilarity> dados;
+	public static ArrayList<SimilarityData> dados;
 
 	private Map<String, Set<String>> dependencies = new HashMap<>();
 
@@ -96,7 +102,7 @@ public class SampleHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		dados = new ArrayList<DadosSimilarity>();
+		dados = new ArrayList<SimilarityData>();
 		try {
 			//View.getInstance().openView(countMSG);
 			//hideView();
@@ -110,7 +116,7 @@ public class SampleHandler extends AbstractHandler {
 					"Erro! Não foi possível executar o plug-in!");
 			e.printStackTrace();
 		}
-		MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDTPlugin", msg.toString());
+		//MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDTPlugin", msg.toString());
 
 		MessageDialog.openInformation(window.getShell(), "ExemploEclipseJDTPlugin", message.toString());
 		//Utils.getInstance().messagens(estrutura);
@@ -164,7 +170,7 @@ public class SampleHandler extends AbstractHandler {
 	}
 
 	public void verifySimilarityBetweenPackages() throws Exception {
-		DadosSimilarity ds = new DadosSimilarity();
+		SimilarityData ds = new SimilarityData();
 		String values = "";		
 		float totalSimilaridade = 0;
 		float media = 0;
@@ -177,6 +183,7 @@ public class SampleHandler extends AbstractHandler {
 						String c22 = c2.getElementName();						
 						if (!c11.equals(c22)) {							
 							if (p1.equals(p2)) { // similarity of class same pack
+								message.append("-------- Comparação classe "+ c11 + " com a classe   " + c22 +" ----- \n");
 								System.out.println("Classe:  " + c11 + " com a classe   " + c22);															
 								Dependency.getInstance().verifyDependenciesOfSuperClass(c11, c22, dependencies);
 								//verifyDependenciesOfSuperClass(c11, c22);
@@ -184,12 +191,10 @@ public class SampleHandler extends AbstractHandler {
 								totalSimilaridade += verifySimilarity(c11, c22);
 								System.out.println("Anterior:  " + anterior);
 								if (totalSimilaridade> 0.5) {
-									message.append("---------------------- Comparação ---------------------- \n");
-									message.append("Classe:  " + c11 + " com a classe   " + c22+" \n");									
-									message.append("Classe: " + c22+ "pode ser movida para o pacote "+ pack1 +" Similaridade de:"+ totalSimilaridade +"\n");
-								}/*else {
+									message.append("Classe: " + c22+ "pode ser agrupada no mesmo pacote da classe:"+ c11 +" Similaridade de:"+ totalSimilaridade +"\n");
+								}else {
 									message.append("Classe: " + c22+ "Similaridade de:"+ totalSimilaridade +"\n");
-								}*/
+								}
 								System.out.println("Valor similaridade: " + totalSimilaridade);
 								cont++;
 							}
@@ -197,22 +202,22 @@ public class SampleHandler extends AbstractHandler {
 							else {
 
 								System.out.println("Classe:  " + c11 + " com a classe   " + c22);
-								message.append("Classe:  " + c11 + " com a classe   " + c22 +" \n");
+								message.append("-------- Comparação classe "+ c11 + " com a classe   " + c22 +" ----- \n");
+								//message.append("Classe:  " + c11 + " com a classe   " + c22 +" \n");
 								Dependency.getInstance().verifyDependenciesOfSuperClass(c11, c22, dependencies);
 								float anterior = verifySimilarity(c11, c22);
 								totalSimilaridade += verifySimilarity(c11, c22);
-								System.out.println("Anterior:  " + anterior);
+								System.out.println("Anterior:  " + anterior);							
 								if (totalSimilaridade> 0.5) {
-									message.append("---------------------- Comparação ---------------------- \n");
-									message.append("Classe:  " + c11 + " com a classe   " + c22+" \n");									
-									message.append("Classe: " + c22+ "pode ser movida para o pacote "+ pack1 +" Similaridade de:"+ totalSimilaridade +"\n");
-								}//else {
-							//		message.append("Classe: " + c22+ "Similaridade de:"+ totalSimilaridade +"\n");
-								//}
+																	
+									message.append("Classe: " + c22+ "pode ser agrupada no mesmo pacote da classe:"+ c11 +" Similaridade de:"+ totalSimilaridade +"\n");
+								}else {
+									message.append("Classe: " + c22+ "Similaridade de:"+ totalSimilaridade +"\n");
+								}
 								System.out.println("Valor similaridade: " + totalSimilaridade);
 								cont++;
 							}
-							message.append("-----------------------------------------------\n");
+							//message.append("-----------------------------------------------\n");
 							media = totalSimilaridade / cont;
 							System.out.println("Média   " + media);
 							String t = Float.toString(media);
@@ -220,7 +225,7 @@ public class SampleHandler extends AbstractHandler {
 							// values.add(t);
 							String cp = c11 + " " + p2;
 							matrizInfo.put(cp, t);
-							ds = new DadosSimilarity(p2, c11, t);
+							ds = new SimilarityData(p2, c11, t);
 
 						}
 					}
@@ -357,7 +362,7 @@ public class SampleHandler extends AbstractHandler {
 		if (packageFragment.getKind() == IPackageFragmentRoot.K_SOURCE) {
 			for (ICompilationUnit compilationUnit : packageFragment.getCompilationUnits()) {
 
-				TypeVisitorAST visitor = new TypeVisitorAST(compilationUnit);
+				VisitorAST visitor = new VisitorAST(compilationUnit);
 				Set<TypeDeclaration> declarations = visitor.getDeclaration();
 				for (TypeDeclaration typeDeclaration : declarations) {
 					addTypeDeclarationName(typeDeclaration, typeDeclarations);
@@ -386,7 +391,7 @@ public class SampleHandler extends AbstractHandler {
 		IViewPart myView = wp.findView("Similaridade.exampleast.util.Similaridades");
 		wp.hideView(myView);
 	}
-	public ArrayList<DadosSimilarity> getDados() {
+	public ArrayList<SimilarityData> getDados() {
 		return dados;
 	}*/
 

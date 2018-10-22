@@ -1,6 +1,8 @@
 package two;
 
-public class B {
+import one.X;
+
+public class B extends X {
 
 	private String a;
 	private String b;

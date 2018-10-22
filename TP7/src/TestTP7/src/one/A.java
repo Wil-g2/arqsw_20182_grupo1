@@ -1,6 +1,6 @@
 package one;
 
-public class A {
+public class A extends X{
 	private String a;
 	private String b;
 	
@@ -9,6 +9,7 @@ public class A {
 	}
 	
 	public void getA() {
-		
+		new X ();
 	}
+		
 }
