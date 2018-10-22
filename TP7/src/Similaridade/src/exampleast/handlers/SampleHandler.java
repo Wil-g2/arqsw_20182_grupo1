@@ -191,9 +191,9 @@ public class SampleHandler extends AbstractHandler {
 								totalSimilaridade += verifySimilarity(c11, c22);
 								System.out.println("Anterior:  " + anterior);
 								if (totalSimilaridade> 0.5) {
-									message.append("Classe: " + c22+ "pode ser agrupada no mesmo pacote da classe:"+ c11 +" Similaridade de:"+ totalSimilaridade +"\n");
+									message.append("Classe: " + c22+ " pode ser agrupada no mesmo pacote da classe:"+ c11 +" Similaridade de:"+ totalSimilaridade +"\n");
 								}else {
-									message.append("Classe: " + c22+ "Similaridade de:"+ totalSimilaridade +"\n");
+									message.append("Classe: " + c22+ " Similaridade de:"+ totalSimilaridade +"\n");
 								}
 								System.out.println("Valor similaridade: " + totalSimilaridade);
 								cont++;
@@ -210,9 +210,9 @@ public class SampleHandler extends AbstractHandler {
 								System.out.println("Anterior:  " + anterior);							
 								if (totalSimilaridade> 0.5) {
 																	
-									message.append("Classe: " + c22+ "pode ser agrupada no mesmo pacote da classe:"+ c11 +" Similaridade de:"+ totalSimilaridade +"\n");
+									message.append("Classe: " + c22+ " pode ser agrupada no mesmo pacote da classe:"+ c11 +" Similaridade de:"+ totalSimilaridade +"\n");
 								}else {
-									message.append("Classe: " + c22+ "Similaridade de:"+ totalSimilaridade +"\n");
+									message.append("Classe: " + c22+ " Similaridade de:"+ totalSimilaridade +"\n");
 								}
 								System.out.println("Valor similaridade: " + totalSimilaridade);
 								cont++;
