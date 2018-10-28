@@ -22,6 +22,14 @@ Projetos para a disciplina de Arquitetura de Software (Ufla/2018) - Prof. Ricard
 * [TP6](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP6) - Trabalho sobre Remodularização
   * [/src](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP6/src)
   * [Apresentação](https://github.com/rterrabh/arqsw_20182_grupo1/blob/master/TP6/apresentacao.pdf)  
+* [TP7](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP7) - Trabalho sobre Similaridade
+  * [/src](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP7/src)
+  * [Apresentação](https://github.com/rterrabh/arqsw_20182_grupo1/blob/master/TP7/apresentacao.pdf)
+* [TP8](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP8) - Trabalho sobre (...)
+  * [/src](https://github.com/rterrabh/arqsw_20182_grupo1/tree/master/TP8/src)
+  * [Apresentação](https://github.com/rterrabh/arqsw_20182_grupo1/blob/master/TP8/apresentacao.pdf)
+
+
   
 ## Participantes
 
