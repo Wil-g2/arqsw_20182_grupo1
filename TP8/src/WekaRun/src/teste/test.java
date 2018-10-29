@@ -17,7 +17,7 @@ import weka.gui.explorer.ExplorerDefaults;
 public class test {
 	public static void main(String[] args) throws Exception {
 		DataSource source = null;
-		source = new DataSource("/home/willian/Desenvolvimento/arqsw_20172_grupo2/TP8/TP8-KMeans/src/dependencias.arff");
+		source = new DataSource("/home/willian/Desenvolvimento/arqsw_20182_grupo1/TP8/src/KMeans/kmeans.arff");
 		Instances cpu = source.getDataSet();		
 		SimpleKMeans kmeans = new SimpleKMeans();
 		try {
