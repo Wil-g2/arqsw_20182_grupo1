@@ -1,0 +1,17 @@
+@relation cluster-test
+
+@attribute nome {a.class,b.class,c.class,d.class,e.class,f.class,g.class}
+@attribute a {TRUE,FALSE}
+@attribute b {TRUE,FALSE}
+@attribute String {TRUE,FALSE}
+@attribute BD {TRUE,FALSE}
+@attribute Carro {TRUE,FALSE}
+
+@data
+a.class,TRUE,TRUE,TRUE,TRUE,FALSE
+b.class,TRUE,FALSE,FALSE,TRUE,FALSE
+c.class,FALSE,FALSE,FALSE,TRUE,FALSE
+d.class,TRUE,TRUE,TRUE,FALSE,FALSE
+e.class,FALSE,FALSE,FALSE,TRUE,FALSE
+f.class,FALSE,FALSE,FALSE,TRUE,FALSE
+g.class,TRUE,FALSE,TRUE,TRUE,FALSE
