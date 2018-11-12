@@ -1,18 +1,31 @@
 package view;
 
-import model.Test;
-import presenter.TestPresenter;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import model.Model;
+import presenter.Presenter;
 
 /**
  * interface do programa
  */
 public class Interface {
 
-	public static void main(String args[]){
-        Interface principal = new Interface();
-        TestPresenter tpCorrect = new TestPresenter();
-        System.out.println(tpCorrect);
-        //Test t = new Test(10, "Jose");
+	private JLabel lbl1;
+	private JLabel lbl2;
+	private JLabel lbl3;
+	private JTextField txt1;
+	private JTextField txt2;
+	private JTextField txt3;
+	private JPanel panel; 
+	private JTextArea area;
+	public static void main(String args[]){     
+        //TestPresenter tpCorrect = new TestPresenter();        
+        JOptionPane.showMessageDialog(null, "teste");
+        Model model = new Model();
         //t.test();
     }
 }

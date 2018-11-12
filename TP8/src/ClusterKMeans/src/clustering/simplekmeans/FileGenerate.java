@@ -23,7 +23,7 @@ public class FileGenerate {
 
 		Set<String> dependeciesProject = allDependencies;
 	    
-		File file = new File("/home/alberane/dataset_kmeans.arff");
+		File file = new File("dataset_kmeans.arff");
 		file.createNewFile();
 		FileWriter fileWriter = new FileWriter(file, false);
 		PrintWriter writer = new PrintWriter(fileWriter);

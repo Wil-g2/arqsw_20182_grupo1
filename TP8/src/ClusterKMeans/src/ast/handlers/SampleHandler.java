@@ -8,9 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.swing.JOptionPane;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -20,6 +23,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -107,14 +111,28 @@ public class SampleHandler extends AbstractHandler {
 					this.allDependencies.addAll(typeDependencies);
 					dependencies.put(unit.getElementName().toString(), typeDependencies);
 				}
-				informations.put(pacoteAnalisado, strSet);
+				informations.put(pacoteAnalisado, strSet); 
 			}
 
 		}
 
 	}
 
-
+	public static void createPackage(IProject project) throws JavaModelException { 
+		int cont = 1;
+		IPackageFragment pacote = null;
+		if (JOptionPane.showConfirmDialog(null,
+				"Um cluster serah criado para agrupar classes similares, deseja continuar?") == JOptionPane.YES_OPTION) {
+			IJavaProject javaProject = JavaCore.create(project);
+			IFolder folder = project.getFolder("src");
+			IPackageFragmentRoot srcFolder = javaProject.getPackageFragmentRoot(folder);
+			IPackageFragment fragment = srcFolder.createPackageFragment("cluster" + cont, true, null);
+			System.out.println("fragment:  " + fragment.getElementName());
+			cont++;
+			pacote = fragment;
+		}
+	}
+	
 	public Set<String> getAllDependencies() {
 		return allDependencies;
 	}
