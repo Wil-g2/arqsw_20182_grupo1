@@ -1,0 +1,3 @@
+model.Model Can Access view.Interface
+presenter.Presenter Can Declare java.lang.String
+presenter.Presenter Can Declare javax.swing.JOptionPane
