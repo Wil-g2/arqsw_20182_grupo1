@@ -224,10 +224,11 @@ public class frmRestriction extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton4)
-                    .addComponent(jButton8))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton8)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -283,6 +284,7 @@ public class frmRestriction extends javax.swing.JFrame {
 
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e.getMessage());
             } finally {
                 connection.desconectar();
             }
@@ -332,6 +334,7 @@ public class frmRestriction extends javax.swing.JFrame {
 
         } catch (IOException ex) {
             Logger.getLogger(frmRestriction.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
 
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -379,7 +382,11 @@ public class frmRestriction extends javax.swing.JFrame {
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }finally{
+                connection.desconectar();
             }
+                    
         }
 
 
@@ -413,6 +420,7 @@ public class frmRestriction extends javax.swing.JFrame {
             listRestriction.repaint();
         } catch (IOException ex) {
             Logger.getLogger(frmRestriction.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 

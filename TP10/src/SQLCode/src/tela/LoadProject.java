@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.Scanner;
@@ -91,8 +92,7 @@ public class LoadProject extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        //txtPath.setText("F:\\Desenvolvimento\\Projetos\\arqsw_20172_grupo2\\TP5\\TesteArchitecturePattern\\dependencies.txt");
+       
         jFileChooser1.setDialogTitle("Selecione o projeto");
         jFileChooser1.setFileSelectionMode(jFileChooser1.DIRECTORIES_ONLY);
         //FileFilter filter = new FileNameExtensionFilter("Dependencias Texto", "txt","text");
@@ -105,22 +105,23 @@ public class LoadProject extends javax.swing.JFrame {
             txtPath.setText(jFileChooser1.getSelectedFile().getAbsolutePath());
             Runtime run = Runtime.getRuntime();
             try {
-                //String cmd = "java -jar /home/ubuntu/Documents/javadepextractor.jar " + txtPath.getText();
-                String cmd = "java -jar javadepextractor.jar " + txtPath.getText();
-                
+                String cmd = "java -jar javadepextractor.jar " + txtPath.getText();                
                 System.out.println(cmd);
                 run.exec(cmd);
 
+                Thread.sleep(5000);
                 JOptionPane.showMessageDialog(this, "Projeto carregado com sucesso!");
                 Properties props = new Properties();
                 FileOutputStream config = new FileOutputStream("config.properties");
-                props.setProperty("path", txtPath.getText());
-                //propSalvar.setProperty("porta", "alguma coisa ai veio");
-                //props.load(config);               
+                props.setProperty("path", txtPath.getText());                         
                 props.store(config, null);
                 System.out.println("teste");
             } catch (IOException ex) {
                 Logger.getLogger(LoadProject.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LoadProject.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
             ConexaoSQLLite connection = new ConexaoSQLLite();
             String tables = "CREATE TABLE IF NOT EXISTS project (id INTEGER PRIMARY KEY AUTOINCREMENT, origem VARCHAR(255) NOT NULL,tipo VARCHAR(30) NOT NULL,destino VARCHAR(255) NOT NULL)";
@@ -131,15 +132,12 @@ public class LoadProject extends javax.swing.JFrame {
                     Statement stmt = connection.criarStatement();
                     stmt.execute(tables);
                     stmt.execute(del);
-                    Scanner ler = new Scanner(System.in);
-                    //String nome = "F:\\Desenvolvimento\\Projetos\\arqsw_20182_grupo1\\TP7\\src\\TestTP7\\src\\dependencies.txt";
+                    Scanner ler = new Scanner(System.in);                    
                     String nome = txtPath.getText() + "\\dependencies.txt";
                     try {
                         FileReader arq = new FileReader(nome);
                         BufferedReader lerArq = new BufferedReader(arq);
-                        String linha = lerArq.readLine(); // lê a primeira linha
-                        // a variável "linha" recebe o valor "null" quando o processo
-                        // de repetição atingir o final do arquivo texto
+                        String linha = lerArq.readLine(); // lê a primeira linha                                                
                         PreparedStatement prepareStatement = connection.preparesStatement(insert);
                         while (linha != null) {
                             System.out.println("Teste");
@@ -156,11 +154,12 @@ public class LoadProject extends javax.swing.JFrame {
                     } catch (IOException e) {
                         System.err.printf("Erro na abertura do arquivo: %s.\n",
                                 e.getMessage());
+                        JOptionPane.showMessageDialog(null, e.getMessage());
                     }
-                } catch (Exception e) {
-
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
                 } finally {
-
+                    connection.desconectar();
                 }
             }
         }
