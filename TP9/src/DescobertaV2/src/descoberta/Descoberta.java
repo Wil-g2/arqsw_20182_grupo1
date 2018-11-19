@@ -73,6 +73,7 @@ public class Descoberta {
                 String verificarModel = "select count(*) from project where origem like ? and destino like \"java.sql%\" ";
                 String verificarView = "select count(*) from project where origem like ? and destino like \"javax.swing%\" ";
                 String verificarCamada = "select count(*) from pacotes where pacote1=? and pacote2=?";
+                String verificarCamada2 = "select count(*) from pacotes where pacote2=?";
 
                 prepareStatement = connection.preparesStatement(queryPacotes);
                 ResultSet rsPacotes = prepareStatement.executeQuery();
@@ -91,19 +92,19 @@ public class Descoberta {
                             prepareStatement = connection.preparesStatement(verificarModel);
                             prepareStatement.setString(1, rsPacotes.getString(1) + "%");
                             ResultSet rsModel = prepareStatement.executeQuery();
-                            if (rsModel.getInt(1) > 0) {                          
+                            if (rsModel.getInt(1) > 0) {
                             }
                             prepareStatement = connection.preparesStatement(verificarView);
                             prepareStatement.setString(1, rsPacotes.getString(1) + "%");
                             ResultSet rsView = prepareStatement.executeQuery();
-                            if (rsView.getInt(1) > 0) {                                
+                            if (rsView.getInt(1) > 0) {
                                 String viewModel = "select count(*) from project where origem like ? and tipo in (\"declare\",\"extend\",\"create\") and destino like \"java.sql%\" ";
                                 prepareStatement = connection.preparesStatement(viewModel);
                                 prepareStatement.setString(1, rsPacotes.getString(1) + "%");
                                 ResultSet rsViewModel = prepareStatement.executeQuery();
                                 if (rsViewModel.getInt(1) > 0) {
                                     System.out.println("MVC");
-                                }else{
+                                } else {
                                     System.out.println("MVP");
                                 }
 
@@ -122,14 +123,21 @@ public class Descoberta {
                         if (rsView.getInt(1) > 0) {
                             System.out.println("MVC");
                         }
+                    } else {
+                        prepareStatement = connection.preparesStatement(verificarCamada2);
+                        prepareStatement.setString(1, rsPacotes.getString(1) + "%");
+                        ResultSet rsCamada = prepareStatement.executeQuery();
+                        if (rsCamada.getInt(1)>0){
+                            System.out.println("Camada ou Pipeline");
+                        }
                     }
                 }
-                
+
                 String queryPacotesAccess = "select pacote1,pacote2 from pacotes";
                 prepareStatement = connection.preparesStatement(queryPacotesAccess);
                 ResultSet rsPacotesAccess = prepareStatement.executeQuery();
-                while(rsPacotesAccess.next()){
-                    System.out.println(rsPacotesAccess.getString(1)+" -> "+rsPacotesAccess.getString(2));
+                while (rsPacotesAccess.next()) {
+                    System.out.println(rsPacotesAccess.getString(1) + " -> " + rsPacotesAccess.getString(2));
                 }
 
             } catch (SQLException e) {
