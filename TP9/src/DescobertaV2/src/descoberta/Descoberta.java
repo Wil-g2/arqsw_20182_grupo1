@@ -10,14 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.jar.Pack200;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
-import jdk.nashorn.internal.objects.NativeString;
 
 /**
  *
@@ -128,6 +123,13 @@ public class Descoberta {
                             System.out.println("MVC");
                         }
                     }
+                }
+                
+                String queryPacotesAccess = "select pacote1,pacote2 from pacotes";
+                prepareStatement = connection.preparesStatement(queryPacotesAccess);
+                ResultSet rsPacotesAccess = prepareStatement.executeQuery();
+                while(rsPacotesAccess.next()){
+                    System.out.println(rsPacotesAccess.getString(1)+" -> "+rsPacotesAccess.getString(2));
                 }
 
             } catch (SQLException e) {
