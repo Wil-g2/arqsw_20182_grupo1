@@ -53,6 +53,7 @@ public class frmRestriction extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGroup = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -71,6 +72,9 @@ public class frmRestriction extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        rgRequired = new javax.swing.JRadioButton();
+        rgDenied = new javax.swing.JRadioButton();
+        rgCan = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Restrições");
@@ -128,7 +132,7 @@ public class frmRestriction extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(listClass2);
 
-        jButton2.setText("Can");
+        jButton2.setText("Access");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -181,6 +185,16 @@ public class frmRestriction extends javax.swing.JFrame {
             }
         });
 
+        btnGroup.add(rgRequired);
+        rgRequired.setText("Required");
+
+        btnGroup.add(rgDenied);
+        rgDenied.setText("Denied");
+
+        btnGroup.add(rgCan);
+        rgCan.setSelected(true);
+        rgCan.setText("Can");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -196,12 +210,21 @@ public class frmRestriction extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(14, 14, 14)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(14, 14, 14)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(rgRequired)
+                                                    .addComponent(rgDenied)
+                                                    .addComponent(rgCan))
+                                                .addGap(0, 0, Short.MAX_VALUE))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jButton1)
                                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -244,7 +267,13 @@ public class frmRestriction extends javax.swing.JFrame {
                         .addGap(7, 7, 7)
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)))
+                        .addComponent(jButton7)
+                        .addGap(18, 18, 18)
+                        .addComponent(rgRequired)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rgDenied)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rgCan)))
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addGap(4, 4, 4)
@@ -294,15 +323,27 @@ public class frmRestriction extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String classe1 = listClass.getSelectedValue();
         String classe2 = listClass2.getSelectedValue();
-        modelRestriciton.addElement(classe1 + " Can Access " + classe2);
+        if (rgRequired.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Required Access -" + classe2);
+        } else if (rgDenied.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Denied Access -" + classe2);
+        } else {
+            modelRestriciton.addElement(classe1 + "- Can Access -" + classe2);
+        }
         listRestriction.setModel(modelRestriciton);
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         String classe1 = listClass.getSelectedValue();
         String classe2 = listClass2.getSelectedValue();
-        modelRestriciton.addElement(classe1 + " Can Extend " + classe2);
+        if (rgRequired.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Required Extend -" + classe2);
+        } else if (rgDenied.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Denied Extend -" + classe2);
+        } else {
+            modelRestriciton.addElement(classe1 + "- Can Extend -" + classe2);
+        }
+
         listRestriction.setModel(modelRestriciton);
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -349,44 +390,42 @@ public class frmRestriction extends javax.swing.JFrame {
 
         if (connection.conectar()) {
             try {
-
                 ListModel<String> model = listRestriction.getModel();
                 PreparedStatement prepareStatement = null;
                 String[] parameters = null;
                 for (int i = 0; i < model.getSize(); i++) {
-
-                    if (model.getElementAt(i).contains("Can Access")) {
+                    if (model.getElementAt(i).contains("Can Access") || model.getElementAt(i).contains("Required Access") || model.getElementAt(i).contains("Denied Access")) {
                         prepareStatement = connection.preparesStatement(canAccess);
-                        parameters = model.getElementAt(i).split("Can Access");
-                    } else if (model.getElementAt(i).contains("Can Implement")) {
+                    } else if (model.getElementAt(i).contains("Can Implement") || model.getElementAt(i).contains("Required Implement") || model.getElementAt(i).contains("Denied Implement")) {
                         prepareStatement = connection.preparesStatement(implement);
-                        parameters = model.getElementAt(i).split("Can Declare");
-                    } else if (model.getElementAt(i).contains("Can Declare")) {
+                    } else if (model.getElementAt(i).contains("Can Declare") || model.getElementAt(i).contains("Required Declare") || model.getElementAt(i).contains("Denied Declare")) {
                         prepareStatement = connection.preparesStatement(declare);
-                        parameters = model.getElementAt(i).split("Can Declare");
-                    } else if (model.getElementAt(i).contains("Can Extend")) {
+                    } else if (model.getElementAt(i).contains("Can Extend") || model.getElementAt(i).contains("Required Extend") || model.getElementAt(i).contains("Denied Extend")) {
                         prepareStatement = connection.preparesStatement(implement);
-                        parameters = model.getElementAt(i).split("Can Extend");
                     }
-
+                    parameters = model.getElementAt(i).split("-");
                     prepareStatement.setString(1, parameters[0].trim());
-                    prepareStatement.setString(2, parameters[1].trim());
+                    prepareStatement.setString(2, parameters[2].trim());
                     ResultSet rs = prepareStatement.executeQuery();
-                    //if (rs.getInt("count")>1) {
                     if (rs.getInt(1) > 0) {
-                        txtResult.append("OK: " + model.getElementAt(i) + "\n");//txtResult.add("OK: "+model.getElementAt(i));
-                        //System.out.println("OK: "+model.getElementAt(i));//txtResult.add("OK: "+model.getElementAt(i), this);                        
+                        if (model.getElementAt(i).contains("Denied")) { //Se for Deined e encotrar ocorrência
+                            txtResult.append("(DIVERGÊNCIA) - " + model.getElementAt(i) + "\n");
+                        }
                     } else {
-                        txtResult.append("Error: " + model.getElementAt(i) + "\n");//txtResult.add("Error: "+model.getElementAt(i));//System.out.println("Error: "+model.getElementAt(i));//txtResult.add("Error: "+model.getElementAt(i), this);
+                        if (model.getElementAt(i).contains("Can Access")) { //Se for Access e não encotrar ocorrência
+                            txtResult.append("(AUSÊNCIA NÃO OBRIGATÓRIA) - " + model.getElementAt(i) + "\n");
+                        }else if(model.getElementAt(i).contains("Required")){ //Se for Required e não encotrar ocorrência
+                            txtResult.append("(AUSÊNCIA) - " + model.getElementAt(i) + "\n");
+                        }
                     }
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
                 JOptionPane.showMessageDialog(null, e.getMessage());
-            }finally{
+            } finally {
                 connection.desconectar();
             }
-                    
+
         }
 
 
@@ -395,20 +434,34 @@ public class frmRestriction extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         String classe1 = listClass.getSelectedValue();
         String classe2 = listClass2.getSelectedValue();
-        modelRestriciton.addElement(classe1 + " Can Implement " + classe2);
+        if (rgRequired.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Required Implement -" + classe2);
+        } else if (rgDenied.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Denied Implement -" + classe2);
+        } else {
+            modelRestriciton.addElement(classe1 + "- Can Implement -" + classe2);
+        }
+
         listRestriction.setModel(modelRestriciton);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         String classe1 = listClass.getSelectedValue();
         String classe2 = listClass2.getSelectedValue();
-        modelRestriciton.addElement(classe1 + " Can Declare " + classe2);
+        if (rgRequired.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Required Declare -" + classe2);
+        } else if (rgDenied.isSelected()) {
+            modelRestriciton.addElement(classe1 + "- Denied Declare -" + classe2);
+        } else {
+            modelRestriciton.addElement(classe1 + "- Can Declare -" + classe2);
+        }
+
         listRestriction.setModel(modelRestriciton);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         try {
-            modelRestriciton.clear();           
+            modelRestriciton.clear();
             BufferedReader br = new BufferedReader(new FileReader("restricoes.txt"));
             while (br.ready()) {
                 String linha = br.readLine();
@@ -460,6 +513,7 @@ public class frmRestriction extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -477,6 +531,9 @@ public class frmRestriction extends javax.swing.JFrame {
     private javax.swing.JList<String> listClass;
     private javax.swing.JList<String> listClass2;
     private javax.swing.JList<String> listRestriction;
+    private javax.swing.JRadioButton rgCan;
+    private javax.swing.JRadioButton rgDenied;
+    private javax.swing.JRadioButton rgRequired;
     private javax.swing.JTextArea txtResult;
     // End of variables declaration//GEN-END:variables
 }
