@@ -107,7 +107,7 @@ public class LoadProjectMoose extends javax.swing.JFrame {
             txtPath.setText(jFileChooser1.getSelectedFile().getAbsolutePath());
             Runtime run = Runtime.getRuntime();
             try {
-                String cmd = "/home/willian/Desenvolvimento/jdt2famix/jdt2famix.sh " + txtPath.getText();                
+                String cmd = "/home/ubuntu/Downloads/jdt2famix/jdt2famix.sh " + txtPath.getText();                
                 System.out.println(cmd);
                 run.exec(cmd);
                 Thread.sleep(5000);
