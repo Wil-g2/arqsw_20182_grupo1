@@ -1,6 +1,4 @@
-package presenter;
-
-import model.Model;
+package model;
 
 public class Presenter {
 	

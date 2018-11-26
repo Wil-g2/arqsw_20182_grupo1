@@ -1,13 +1,10 @@
-package view;
+package model;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import model.Model;
-import presenter.Presenter;
 
 /**
  * interface do programa
@@ -26,6 +23,6 @@ public class Interface {
         //TestPresenter tpCorrect = new TestPresenter();        
         JOptionPane.showMessageDialog(null, "teste");
         Model model = new Model();
-        //t.test();
+        
     }
 }
